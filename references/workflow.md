@@ -3,7 +3,7 @@
 ## State
 
 - `theme_mode`: `fresh_graduate`, `alumni_retrospective`, or `unknown`
-- `current_step`: `age_inference`, `school_detection`, `school_confirmation`, `school_research`, `slot_followup`, `final_confirmation`, `generation`
+- `current_step`: `age_inference`, `school_detection`, `school_confirmation`, `school_research`, `slot_followup`, `generation`, `post_generation_explanation`
 - `school_detection_status`: `detected_pending_confirmation`, `not_detected_pending_user_input`, or `confirmed`
 - `school_research`: landmarks, motto, positive alumni references, source notes
 
@@ -43,6 +43,7 @@ After confirmation, retrieve:
 
 - Representative visual elements: gates, lakes, halls, libraries, towers, sculptures, campus axes, iconic buildings.
 - Motto or school spirit.
+- Representative colors: school crest colors, official school colors, or highly recognizable campus colors.
 - Positive famous alumni when they are well-known and verifiable.
 
 Prefer official school sites. If sources conflict or are weak, omit uncertain items.
@@ -56,6 +57,8 @@ Ask for optional information only after school confirmation:
 - `个人特质 / 希望呈现的气质`: examples include 勇敢、自由、坚定、温柔、理性、热烈、独立、探索、创造、笃定、开阔.
 - `校园经历 / 社团经历`: examples include 学生会、辩论队、合唱团、实验室项目、支教、创业比赛、毕业晚会、图书馆自习、操场夜跑.
 - `英文名 / 签名名`: only add a signature if provided.
+
+Ask once, then continue. If the user does not provide optional slots, generate directly with available information. Do not ask "是否继续生成" or wait for a second confirmation.
 
 ## Step 6: Year and Language
 
@@ -72,18 +75,24 @@ Language:
 - Overseas universities: English.
 - "清华大学" defaults to the Beijing university unless the user explicitly says Taiwan / Hsinchu.
 
-## Step 7: Final Confirmation
+## Step 7: Generate Directly
 
-Do not say "我按某某版本来做". Use user-facing wording:
-
-- Fresh graduate: "我判断您更像是刚毕业或即将毕业的同学，学校按【XX】处理，我会重点做毕业仪式感、校园成长线和学校代表元素。"
-- Alumni: "我判断您更像是已经毕业比较久的同学，学校按【XX】处理，我会重点做母校回望、时间沉淀、学校精神和继续向上的力量感。"
-
-## Step 8: Generation
+Do not stop for final confirmation after optional slots. Build the prompt and generate directly.
 
 Use the prompt templates in `references/prompt-templates.md`.
 
 If generating preview images, return them inline in the conversation. Do not only write local Markdown results.
+
+## Step 8: Post-Generation Explanation
+
+After generation, explain what was used:
+
+- Route in user-facing language, not internal route names.
+- Confirmed school.
+- School landmarks and symbols.
+- School motto / spirit keywords.
+- School colors or crest colors used in the palette.
+- Alumni references if used, only as positive symbolic cues.
 
 ## Rollback Signals
 

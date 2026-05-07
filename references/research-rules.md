@@ -6,6 +6,7 @@ After the school is confirmed, research:
 
 - Representative visual elements.
 - Motto or school spirit.
+- Representative colors from the school crest, official school colors, or highly recognizable campus colors.
 - Positive, verifiable, well-known alumni references.
 
 ## Source Priority
@@ -28,6 +29,14 @@ Motto / spirit:
 - Extract 2-5 positive keywords.
 - Convert them into visual direction: light, path, water, books, architecture, season, time, horizon, ascent.
 
+Representative colors:
+
+- Prefer official school colors or crest colors when available.
+- If official colors are not easy to verify, infer cautiously from the crest or the most recognizable campus palette.
+- Use school colors as the main palette or accent palette, balanced with the poster style.
+- Do not force saturated brand colors if they damage portrait clarity or poster elegance.
+- If color facts are uncertain, describe them as visual inspiration rather than official colors.
+
 Alumni:
 
 - Use only real, recognizable, positive public figures.
@@ -48,4 +57,5 @@ After generation, briefly tell the user:
 
 - Which school visual elements were used.
 - Which motto/spirit keywords were used.
+- Which school or crest colors influenced the palette.
 - Which alumni references were used, if any, and that they were used only as positive symbolic cues.
