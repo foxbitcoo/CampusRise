@@ -45,6 +45,7 @@ After confirmation, retrieve:
 - Motto or school spirit.
 - Representative colors: school crest colors, official school colors, or highly recognizable campus colors.
 - Positive famous alumni when they are well-known and verifiable.
+- Accuracy-critical explicit details that may be rendered large or readable: crest, year marks, diploma/gown wording, gate inscriptions, and named-building facade cues.
 
 Prefer official school sites. If sources conflict or are weak, omit uncertain items.
 
@@ -59,6 +60,7 @@ Ask for optional information only after school confirmation:
 - `英文名 / 签名名`: only add a signature if provided.
 
 Ask once, then continue. If the user does not provide optional slots, generate directly with available information. Do not ask "是否继续生成" or wait for a second confirmation.
+If the user does provide optional slots, the very next model action should still be generation, not a long prompt preview or pre-generation explanation.
 
 ## Step 6: Year and Language
 
@@ -78,6 +80,13 @@ Language:
 ## Step 7: Generate Directly
 
 Do not stop for final confirmation after optional slots. Build the prompt and generate directly.
+Do not insert a separate assistant turn that only says "可直接用于出图的提示词如下", lists school sources, or asks the user whether to continue.
+When composing the prompt, separate school elements into:
+
+- `exact elements`: readable crest, year text, school motto/text, diploma/gown identifiers, named landmark buildings
+- `atmosphere elements`: color palette, season, light, books, silhouettes, campus mood
+
+Exact elements must be correct or omitted. Atmosphere elements can stay expressive.
 
 Use the prompt templates in `references/prompt-templates.md`.
 
@@ -93,6 +102,7 @@ After generation, explain what was used:
 - School motto / spirit keywords.
 - School colors or crest colors used in the palette.
 - Alumni references if used, only as positive symbolic cues.
+- Any source notes or school-clue recap should appear here, not before image generation.
 
 ## Rollback Signals
 
@@ -107,3 +117,16 @@ Examples:
 - "刚才那个选择不对"
 
 Rollback only to the affected node, then continue.
+
+## Bad Case Guardrails
+
+When generating the final image prompt, enforce these layout, identity, and anatomy constraints:
+
+- Preserve the uploaded person's gender presentation and core identity direction. Do not turn a female-presenting source into a male-presenting portrait, or vice versa.
+- The main composition is a large side-profile portrait / silhouette used as the background structure.
+- Do not add a second front-facing full-body human as the foreground subject unless the user explicitly asks for that layout.
+- If graduation ceremony details are needed, use small silhouettes, distant people, or symbolic objects instead of a second primary person.
+- If hands, arms, diplomas, books, or gowns appear, keep anatomy stable: no extra hands, extra fingers, fused fingers, broken wrists, duplicated arms, or physically impossible grips.
+- If a named building cannot be rendered faithfully, remove the name cue and fall back to verified school colors or a less explicit campus silhouette.
+- If a crest, seal, or year mark is likely to be wrong at readable size, reduce its size, convert it to an abstract embossed cue, or omit it.
+- If a certificate-holding pose causes unstable hands, switch to a safer composition: sleeves covering hands, one hidden hand, cropped hands, certificate tucked under arm, or no certificate at all.

@@ -57,23 +57,24 @@ Read SKILL.md and use CampusRise to generate an alma-mater narrative poster work
 
 如果你遇到效果不好的案例，欢迎提交 GitHub Issue：
 
-https://github.com/foxbitcoo/CampusRise/issues
+[https://github.com/foxbitcoo/CampusRise/issues](https://github.com/foxbitcoo/CampusRise/issues)
 
 建议提供：
 
 - 你希望生成什么
 - 实际结果哪里不对
 - 学校名称
-- 是否是应届毕业或校友回望场景
+- 大致场景（更偏毕业纪念，还是校友回望）
 - 可公开的截图或描述
 
-如果你在支持 GitHub issue 创建的代理环境中使用本 Skill，也可以直接说：
+如果你在支持 GitHub issue 操作的代理环境中使用本 Skill，也可以直接说：
 
 ```text
 report to issue: 这里写你的问题和评论
 ```
 
-Skill 会整理本次请求、生成结果摘要和你的评论，并尝试提交到本仓库 Issue。
+Skill 会整理本次请求摘要、生成结果摘要和你的评论，并尝试自动提交到本仓库。
+如果你提供了已有 issue 编号或链接，Skill 会优先把内容补充为 comment；否则会新建一个 bad case issue。
 
 ## 设计理念
 
@@ -81,7 +82,7 @@ CampusRise 的核心不是把所有人套进同一个毕业照模板，而是让
 
 设计上会做几个判断：
 
-- 先从人物照片判断更适合毕业纪念感，还是校友回望感。
+- 先从人物状态和整体气质判断更适合毕业纪念感，还是校友回望感。
 - 尽量从图像里找学校线索，减少用户输入负担。
 - 围绕学校代表元素、校训或学校精神组织画面，而不是生成泛化校园背景。
 - 参考校徽、校色或学校代表色来控制整体色调，让画面更有母校亲近感。
