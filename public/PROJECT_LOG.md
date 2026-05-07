@@ -13,7 +13,7 @@
 ### 项目建立
 
 - 确认本地目录：`E:\Codex\图片技能\毕业照P图`
-- 已连接 GitHub 仓库：`https://github.com/foxbitcoo/biyezhao`
+- 已连接 GitHub 仓库：`https://github.com/foxbitcoo/CampusRise`
 - 仓库当前用途明确为：毕业照提示词技能项目
 
 ### 本次整理内容
