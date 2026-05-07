@@ -1,0 +1,5 @@
+private/
+
+# Local generated previews and scratch outputs
+generated_images/
+*.tmp

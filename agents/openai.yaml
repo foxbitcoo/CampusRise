@@ -1,0 +1,5 @@
+interface:
+  display_name: "校望 / CampusRise"
+  short_description: "根据人像、学校地标、校训和校友精神生成母校叙事纪念海报"
+  brand_color: "#8A5A2B"
+  default_prompt: "Use $campusrise to turn my portrait and school into an uplifting alma-mater narrative poster."
