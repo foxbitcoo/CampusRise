@@ -30,6 +30,7 @@ Use this skill to guide a user from portrait upload to a final image-generation 
    - `英文名 / 签名名`
 7. Produce or use the final prompt template. Load [references/prompt-templates.md](references/prompt-templates.md).
 8. If generating an image, return the image in the conversation, not only in a local Markdown report.
+9. If the user says `report to issue`, `submit bad case`, `提交 issue`, or similar, follow the issue-report workflow below.
 
 ## Hard Rules
 
@@ -58,3 +59,21 @@ If the user corrects any earlier answer, go back only to the affected node:
 - Wrong year or text language: update the generation prompt and regenerate if needed.
 
 For the detailed state machine and slot rules, read [references/workflow.md](references/workflow.md).
+
+## Issue Reporting
+
+If the user asks to report a bad case to GitHub:
+
+1. Summarize the current request, known school, route, optional slots, prompt used, generated result summary, and the user's comment.
+2. Do not include private local file paths, private notes, hidden test data, or non-public images unless the user explicitly asks to include them.
+3. Ask for confirmation before creating the issue if the report contains any user-provided image, personal detail, or sensitive context.
+4. Create a GitHub issue in `foxbitcoo/CampusRise` when GitHub tools or `gh` are available.
+5. Use this issue title format: `Bad case: <short problem summary>`.
+6. Use this body structure:
+   - `Context`
+   - `Expected result`
+   - `Actual result`
+   - `School / scenario`
+   - `Prompt or workflow step`
+   - `User comment`
+7. If GitHub tools are unavailable, prepare the issue title and body for the user to submit manually.

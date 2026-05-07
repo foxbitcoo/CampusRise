@@ -1,13 +1,10 @@
-# Prompt 草案
+# Prompt
 
-当前提示词版本已改为单独归档，便于回溯：
+公开目录只保留最新提示词，历史版本不作为公开文档发布。
 
-1. [V1 原始版](./prompt_versions/V1_ORIGINAL.md)
-2. [V2 双分支优化版](./prompt_versions/V2_BRANCH_PROMPTS.md)
-3. [V3 统一工作流版](./prompt_versions/V3_UNIFIED_WORKFLOW_PROMPTS.md)
+- [当前最新提示词](./prompt_versions/LATEST.md)
 
 说明：
 
-- `V1` 是你最初从小红书复制下来的原始风格
-- `V2` 是前一轮按“应届毕业版 / 校友回望版”拆开的优化版
-- `V3` 是当前最新版本，核心变化是先从图片里判断年龄层和学校线索，再分流到不同提示词
+- 当前公开版本对应 `CampusRise 1.0`
+- 后续每次发布新版本时，公开提示词文件同步更新为最新版本

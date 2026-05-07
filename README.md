@@ -2,33 +2,86 @@
 
 Version: `1.0`
 
-校望（CampusRise）是一个 Codex Skill，用于把人物照片与母校信息转化为“母校叙事海报”的生成流程。它不是简单的毕业照模板，而是先识别人物阶段和学校线索，再确认学校、检索学校地标/校训/正向校友精神，最后生成更有母校识别度和向上感的海报提示词。
+校望（CampusRise）是一个母校叙事海报 Skill。它会根据人物照片和学校信息，引导生成一张带有校园记忆、学校精神和个人成长感的纪念海报。
 
-## 适用场景
+## 技能是什么
 
-- 应届或即将毕业的同学：生成毕业仪式感、校园成长线、青春完成时的纪念海报。
-- 毕业多年的校友：生成母校回望、时间沉淀、学校精神与继续向上力量感的纪念海报。
+CampusRise 适合两类场景：
 
-## Skill 入口
+- 给应届或即将毕业的同学生成更有仪式感的毕业纪念海报。
+- 给毕业多年的校友生成带有母校回望、精神传承和继续向上感的纪念海报。
 
-- `SKILL.md`：Codex Skill 入口文件。
-- `references/workflow.md`：完整交互流程、回退机制和槽位规则。
-- `references/prompt-templates.md`：V1.0 应届毕业方向和校友回望方向的提示词模板。
-- `references/research-rules.md`：学校元素、校训、校友线索的检索规则。
+它不是单段固定提示词，而是一个工作流：先理解人物照片和学校线索，再补齐必要信息，最后生成更稳定的海报提示词或图像结果。
 
-## 关键规则
+## 版本
 
-- 学校名必须确认；识别不到学校时要向用户询问，不能 mock。
-- “清华大学”默认指北京清华，使用简体中文；只有用户明确说台湾/新竹清华时才按台湾高校处理。
-- 应届方向如果用户没有提供毕业年份，默认读取当前时区年份；例如当前年份是 2026，则默认毕业年份为 2026。
-- 校友方向如果用户没有提供毕业年份，不编造具体年份。
-- 人物侧脸必须是第一视觉焦点，清晰度和不透明度要高于背景校园元素。
-- 学校地标、校训和校友线索必须来自可靠检索，不确定就不用，不编造。
+当前版本：`1.0`
 
-## 隐私
+## 安装
 
-本仓库只上传公开 Skill 文件和项目文档。真实测试集、人像照片、本地复盘和临时材料放在 `private/`，已被 `.gitignore` 排除，不应上传到 GitHub。
+### Codex
 
-## 项目文档
+在 Codex 中使用内置 skill installer，从 GitHub 安装：
 
-公开项目背景、日志和历史提示词草稿保留在 `public/`，用于回溯 1.0 版本的设计过程。
+```bash
+python ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py --repo foxbitcoo/CampusRise --path .
+```
+
+如果你在 Windows 上使用 Codex，脚本通常位于：
+
+```powershell
+python "$env:USERPROFILE\.codex\skills\.system\skill-installer\scripts\install-skill-from-github.py" --repo foxbitcoo/CampusRise --path .
+```
+
+安装后重启 Codex，让新 Skill 生效。
+
+### Claude Code
+
+Claude Code 目前没有和 Codex 完全相同的 Skill Installer。可以用兼容方式使用：
+
+1. 克隆仓库：
+
+```bash
+git clone https://github.com/foxbitcoo/CampusRise.git
+```
+
+2. 在 Claude Code 中打开该目录，或把 `SKILL.md` 和 `references/` 放到你的项目中。
+
+3. 让 Claude Code 按 `SKILL.md` 执行，例如：
+
+```text
+Read SKILL.md and use CampusRise to generate an alma-mater narrative poster workflow.
+```
+
+## Bad Case 反馈
+
+如果你遇到效果不好的案例，欢迎提交 GitHub Issue：
+
+https://github.com/foxbitcoo/CampusRise/issues
+
+建议提供：
+
+- 你希望生成什么
+- 实际结果哪里不对
+- 学校名称
+- 是否是应届毕业或校友回望场景
+- 可公开的截图或描述
+
+如果你在支持 GitHub issue 创建的代理环境中使用本 Skill，也可以直接说：
+
+```text
+report to issue: 这里写你的问题和评论
+```
+
+Skill 会整理本次请求、生成结果摘要和你的评论，并尝试提交到本仓库 Issue。
+
+## 设计理念
+
+CampusRise 的核心不是把所有人套进同一个毕业照模板，而是让海报更像“这个人”和“这所学校”的连接。
+
+设计上会做几个判断：
+
+- 先从人物照片判断更适合毕业纪念感，还是校友回望感。
+- 尽量从图像里找学校线索，减少用户输入负担。
+- 围绕学校代表元素、校训或学校精神组织画面，而不是生成泛化校园背景。
+- 保留人物辨识度，让用户第一眼能看到这张海报和自己有关。
