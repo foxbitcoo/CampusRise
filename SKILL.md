@@ -2,7 +2,7 @@
 name: campusrise
 description: Generate alma-mater narrative poster prompts from portrait photos and confirmed school identity. Use when the user wants a graduation, alumni, campus-memory, school-spirit, or mother-school poster workflow that routes between fresh graduate and alumni retrospective directions.
 metadata:
-  version: "1.0"
+  version: "1.1"
   short-description: 母校叙事海报生成工作流
 ---
 
