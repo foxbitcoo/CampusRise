@@ -53,44 +53,9 @@ git clone https://github.com/foxbitcoo/CampusRise.git
 Read SKILL.md and use CampusRise to generate an alma-mater narrative poster workflow.
 ```
 
-## 自动更新
+## 更新技能
 
-CampusRise follows the repository `main` branch as its lightweight release channel. When automatic updates are enabled, keep `main` clean: every merge can become the version that users receive.
-
-The recommended setup is to run updates from the agent harness before any skill is loaded, not from inside `SKILL.md`. For Claude Code-compatible environments, add a `SessionStart` hook to your settings:
-
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "npx skills update -g -y 2>/dev/null"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-An example file is provided at [`hooks/session-start-update.example.json`](hooks/session-start-update.example.json).
-
-Why this is outside `SKILL.md`:
-
-- `SKILL.md` should describe the poster workflow itself.
-- The hook updates the local skill copy before the agent reads skill context.
-- The update command consumes startup time, not task-time tokens.
-- `matcher: "startup"` avoids updating on every resume, clear, or compact event.
-
-Security notes:
-
-- Enable automatic updates only for repositories you trust.
-- If you want a frozen version, install or pin a tag instead of following `main`.
-- If this skill later adds executable files such as `scripts/`, treat auto-update as a software supply-chain decision and keep a rollback tag.
+最新版本以本 GitHub 仓库为准；如果你的 Agent 支持 SessionStart 自动更新，也可以让它在新会话开始时自动同步本技能。
 
 ## Bad Case 反馈
 
