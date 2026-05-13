@@ -2,21 +2,27 @@
 
 ## State
 
-- `theme_mode`: `fresh_graduate`, `alumni_retrospective`, or `unknown`
+- `theme_mode`: `fresh_graduate` by default; `alumni_retrospective` only when explicitly requested by the user
 - `current_step`: `age_inference`, `school_detection`, `school_confirmation`, `school_research`, `slot_followup`, `generation`, `post_generation_explanation`
 - `school_detection_status`: `detected_pending_confirmation`, `not_detected_pending_user_input`, or `confirmed`
-- `school_research`: landmarks, motto, positive alumni references, source notes
+- `school_research`: landmarks, motto, positive alumni references, source notes, cached reference images
 
-## Step 1: Portrait and Stage
+## Step 1: Portrait and Publishing Scenario
 
-Infer the approximate life stage from the uploaded portrait(s):
+The V4.1 public workflow is optimized for Xiaohongshu-style fresh-graduate commemorative posters.
 
-- 30 or younger: treat as fresh graduate / soon-to-graduate by default.
-- Over 30: treat as alumni retrospective by default.
+- Treat the default route as fresh graduate / graduation commemorative.
+- Do not route to alumni retrospective just because the person looks older.
+- Use alumni retrospective only when the user explicitly asks for alumni, return-to-campus, or long-after-graduation memory.
 
 Use cautious wording. This is workflow routing, not an identity claim. If the user says "我是博士应届", "我已经毕业很多年", or similar, accept the correction.
 
-## Step 2: School Detection
+## Step 2: School Input and Detection
+
+First check whether the user has explicitly provided the school name in the request.
+
+- If the user clearly names the school, accept it and continue. Do not ask for a second confirmation.
+- If no school is provided, inspect the image for school clues.
 
 Look for:
 
@@ -27,7 +33,7 @@ Look for:
 - Graduation backdrop
 - Banners, walls, plaques, campus landmarks
 
-Always confirm before generation. Do not proceed from detection directly to prompt generation.
+Only ask for school confirmation when the school was inferred from the image or is uncertain.
 
 ## Step 3: School Confirmation
 
@@ -37,27 +43,45 @@ If the user corrects the school, use the corrected school and research that one.
 
 If no school can be detected, ask the user for the school name and stop until they answer.
 
+When asking, separate required school information from optional enhancement fields:
+
+- `B. 学校信息`: required school name, or confirmation/correction of the detected school.
+- Optional fields: name, major/college, campus experience, desired traits, graduation time or year, signature name.
+
 ## Step 4: Research
 
-After confirmation, retrieve:
+After the school is available, retrieve:
 
 - Representative visual elements: gates, lakes, halls, libraries, towers, sculptures, campus axes, iconic buildings.
 - Motto or school spirit.
 - Representative colors: school crest colors, official school colors, or highly recognizable campus colors.
-- Positive famous alumni when they are well-known and verifiable.
 - Accuracy-critical explicit details that may be rendered large or readable: crest, year marks, diploma/gown wording, gate inscriptions, and named-building facade cues.
+- Downloaded reference images for any school-specific element that may be shown clearly or named explicitly.
 
 Prefer official school sites. If sources conflict or are weak, omit uncertain items.
+For V4.1, spending extra time on school fidelity is acceptable. Use web search and official or high-confidence image references before making buildings, crests, gates, inscriptions, or key symbols visible.
+
+For each exact school element candidate:
+
+- First decide whether it is `exact-visible`, `secondary-reference`, or `omit`.
+- `exact-visible` requires cached reference images when the environment allows downloading.
+- If cached references are missing, downgrade to `secondary-reference` or `omit`.
+
+If an exact school landmark is downgraded:
+
+- Replace it first with `location-faithful atmosphere`, not with a random iconic landmark.
+- Keep the replacement tied to the school's real city / region / climate / urban character.
 
 ## Step 5: Optional Slots
 
-Ask for optional information only after school confirmation:
+Use optional information when the user provides it. If asking for a missing school, mention these optional fields in the same message:
 
-- `毕业年份`: fresh-graduate default is current year; alumni default is no explicit year.
+- `姓名`: Chinese or English name.
+- `毕业时间 / 毕业年份`: accepts a year, month, season, or exact graduation date. Fresh-graduate default is the active timezone's current year; alumni default is no explicit year.
 - `专业 / 学院`: examples include 计算机、法学、建筑、医学、新闻传播、金融、公共管理、艺术设计、自动化.
 - `个人特质 / 希望呈现的气质`: examples include 勇敢、自由、坚定、温柔、理性、热烈、独立、探索、创造、笃定、开阔.
 - `校园经历 / 社团经历`: examples include 学生会、辩论队、合唱团、实验室项目、支教、创业比赛、毕业晚会、图书馆自习、操场夜跑.
-- `英文名 / 签名名`: only add a signature if provided.
+- `签名名`: only add a signature if provided.
 
 Ask once, then continue. If the user does not provide optional slots, generate directly with available information. Do not ask "是否继续生成" or wait for a second confirmation.
 If the user does provide optional slots, the very next model action should still be generation, not a long prompt preview or pre-generation explanation.
@@ -66,7 +90,8 @@ If the user does provide optional slots, the very next model action should still
 
 Year:
 
-- Fresh-graduate route: if no year is provided, use the active timezone's current year.
+- Fresh-graduate route: if no graduation time or year is provided, use the active timezone's current year.
+- If the user provides a month, season, or exact graduation date, preserve it when it fits the design; otherwise reduce it to the year for readable poster text.
 - Alumni route: if no year is provided, do not invent a year.
 - If the poster includes a year, all visible year text must match the chosen year.
 
@@ -87,6 +112,10 @@ When composing the prompt, separate school elements into:
 - `atmosphere elements`: color palette, season, light, books, silhouettes, campus mood
 
 Exact elements must be correct or omitted. Atmosphere elements can stay expressive.
+If cached school reference images exist and the generation workflow supports using them, feed those images into generation as hard references for exact elements.
+If the workflow cannot pass those images into generation directly, exact elements should become smaller, less readable, or secondary unless the visual risk is still acceptably low.
+For downgraded architecture, prefer atmosphere elements derived from the school's true location over unrelated city icons.
+For crests or seals, prefer secondary placements: right side, right-lower corner, footer, or a clean side badge area.
 
 Use the prompt templates in `references/prompt-templates.md`.
 
@@ -103,6 +132,7 @@ After generation, explain what was used:
 - School colors or crest colors used in the palette.
 - Alumni references if used, only as positive symbolic cues.
 - Any source notes or school-clue recap should appear here, not before image generation.
+- Whether downloaded/cached school reference images were used for exact building or crest fidelity.
 
 ## Rollback Signals
 
@@ -128,5 +158,8 @@ When generating the final image prompt, enforce these layout, identity, and anat
 - If graduation ceremony details are needed, use small silhouettes, distant people, or symbolic objects instead of a second primary person.
 - If hands, arms, diplomas, books, or gowns appear, keep anatomy stable: no extra hands, extra fingers, fused fingers, broken wrists, duplicated arms, or physically impossible grips.
 - If a named building cannot be rendered faithfully, remove the name cue and fall back to verified school colors or a less explicit campus silhouette.
+- If the school setting can still be grounded geographically, use location-faithful environmental cues before considering any broader city landmark.
 - If a crest, seal, or year mark is likely to be wrong at readable size, reduce its size, convert it to an abstract embossed cue, or omit it.
+- If a crest is retained, place it in a layout-safe secondary zone rather than close to the face or inside a dense blended area.
 - If a certificate-holding pose causes unstable hands, switch to a safer composition: sleeves covering hands, one hidden hand, cropped hands, certificate tucked under arm, or no certificate at all.
+- If an exact school element has no cached visual reference, do not let it become the main visual proof point.
