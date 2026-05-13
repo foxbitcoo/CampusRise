@@ -5,7 +5,7 @@
 - `theme_mode`: `fresh_graduate` by default; `alumni_retrospective` only when explicitly requested by the user
 - `current_step`: `age_inference`, `school_detection`, `school_confirmation`, `school_research`, `slot_followup`, `generation`, `post_generation_explanation`
 - `school_detection_status`: `detected_pending_confirmation`, `not_detected_pending_user_input`, or `confirmed`
-- `school_research`: landmarks, motto, positive alumni references, source notes, cached reference images
+- `school_research`: named campus buildings, building photo references, facade cues, landmarks, motto, source notes, cached reference images
 
 ## Step 1: Portrait and Publishing Scenario
 
@@ -52,25 +52,27 @@ When asking, separate required school information from optional enhancement fiel
 
 After the school is available, retrieve:
 
-- Representative visual elements: gates, lakes, halls, libraries, towers, sculptures, campus axes, iconic buildings.
+- Representative named campus buildings: gates, halls, libraries, towers, academic buildings, media centers, campus axes, sculptures, and other buildings students recognize.
 - Motto or school spirit.
 - Representative colors: school crest colors, official school colors, or highly recognizable campus colors.
 - Accuracy-critical explicit details that may be rendered large or readable: crest, year marks, diploma/gown wording, gate inscriptions, and named-building facade cues.
-- Downloaded reference images for any school-specific element that may be shown clearly or named explicitly.
+- Downloaded or user-provided reference images for any named campus building or school-specific element that may be shown clearly.
 
-Prefer official school sites. If sources conflict or are weak, omit uncertain items.
-For V4.1, spending extra time on school fidelity is acceptable. Use web search and official or high-confidence image references before making buildings, crests, gates, inscriptions, or key symbols visible.
+Prefer official school sites. If sources conflict or are weak, continue searching before selecting the element.
+For V4.1, spending extra time on school fidelity is expected. Use web search and official or high-confidence image references before making buildings, crests, gates, inscriptions, or key symbols visible.
 
 For each exact school element candidate:
 
-- First decide whether it is `exact-visible`, `secondary-reference`, or `omit`.
-- `exact-visible` requires cached reference images when the environment allows downloading.
-- If cached references are missing, downgrade to `secondary-reference` or `omit`.
+- Record the exact building or element name.
+- Cache or use real reference images whenever the environment allows downloading or the user provides them.
+- Extract concrete visual cues: overall massing, silhouette, roofline, facade proportion, window rhythm, entrance shape, material/color, surrounding plaza/stairs/greenery/roads.
+- Prefer a different verified campus building over a generic school-like building if the first candidate lacks usable images.
 
-If an exact school landmark is downgraded:
+If no usable real building image can be obtained after reasonable search:
 
-- Replace it first with `location-faithful atmosphere`, not with a random iconic landmark.
-- Keep the replacement tied to the school's real city / region / climate / urban character.
+- Ask the user to provide the preferred campus building photo when architecture fidelity is central to the request.
+- If generation must proceed without it, explicitly state that the building fidelity is weak; do not claim exact restoration.
+- Do not use a random iconic city landmark or generic campus as a substitute for the named school building.
 
 ## Step 5: Optional Slots
 
@@ -111,11 +113,11 @@ When composing the prompt, separate school elements into:
 - `exact elements`: readable crest, year text, school motto/text, diploma/gown identifiers, named landmark buildings
 - `atmosphere elements`: color palette, season, light, books, silhouettes, campus mood
 
-Exact elements must be correct or omitted. Atmosphere elements can stay expressive.
-If cached school reference images exist and the generation workflow supports using them, feed those images into generation as hard references for exact elements.
-If the workflow cannot pass those images into generation directly, exact elements should become smaller, less readable, or secondary unless the visual risk is still acceptably low.
-For downgraded architecture, prefer atmosphere elements derived from the school's true location over unrelated city icons.
-For crests or seals, prefer secondary placements: right side, right-lower corner, footer, or a clean side badge area.
+Exact elements must be grounded by real references. Atmosphere elements can stay expressive, but they cannot replace required campus architecture.
+If cached school reference images exist and the generation workflow supports using them, feed those images into generation as hard references for buildings and exact elements.
+If the workflow cannot pass those images into generation directly, convert the reference image into a dense verbal architectural brief and include the building name plus facade cues in the prompt.
+For architecture, preserve the real building's name, shape, facade rhythm, material impression, and surrounding campus relationship as much as the model allows.
+For crests or seals, use clean placement zones such as right side, right-lower corner, footer, or a title-adjacent badge; do not let them crowd the face.
 
 Use the prompt templates in `references/prompt-templates.md`.
 
@@ -132,7 +134,7 @@ After generation, explain what was used:
 - School colors or crest colors used in the palette.
 - Alumni references if used, only as positive symbolic cues.
 - Any source notes or school-clue recap should appear here, not before image generation.
-- Whether downloaded/cached school reference images were used for exact building or crest fidelity.
+- Which real campus building photos were used; the building names; and which architectural details were carried into the generated prompt/result.
 
 ## Rollback Signals
 
@@ -157,9 +159,9 @@ When generating the final image prompt, enforce these layout, identity, and anat
 - Do not add a second front-facing full-body human as the foreground subject unless the user explicitly asks for that layout.
 - If graduation ceremony details are needed, use small silhouettes, distant people, or symbolic objects instead of a second primary person.
 - If hands, arms, diplomas, books, or gowns appear, keep anatomy stable: no extra hands, extra fingers, fused fingers, broken wrists, duplicated arms, or physically impossible grips.
-- If a named building cannot be rendered faithfully, remove the name cue and fall back to verified school colors or a less explicit campus silhouette.
-- If the school setting can still be grounded geographically, use location-faithful environmental cues before considering any broader city landmark.
-- If a crest, seal, or year mark is likely to be wrong at readable size, reduce its size, convert it to an abstract embossed cue, or omit it.
-- If a crest is retained, place it in a layout-safe secondary zone rather than close to the face or inside a dense blended area.
+- If a named building cannot be researched from real images, search for another verifiable campus building or ask the user for a building photo before claiming exact architecture.
+- If the school setting can still be grounded geographically, use location-faithful environmental cues only as support, not as a replacement for real campus architecture.
+- If a crest, seal, or year mark is likely to be wrong at readable size, verify it with a reference image or keep it secondary; do not invent a near-miss.
+- If a crest is retained, place it in a clean layout zone rather than close to the face or inside a dense blended area.
 - If a certificate-holding pose causes unstable hands, switch to a safer composition: sleeves covering hands, one hidden hand, cropped hands, certificate tucked under arm, or no certificate at all.
-- If an exact school element has no cached visual reference, do not let it become the main visual proof point.
+- If an exact campus building has no cached or user-provided visual reference, do not present it as faithfully restored.
