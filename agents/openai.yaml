@@ -1,5 +1,6 @@
 interface:
   display_name: "校望 / CampusRise"
-  short_description: "根据人像、学校地标、校训和校友精神生成母校叙事纪念海报"
+  version: "V4.1"
+  short_description: "根据多张人像和真实校园建筑参考，生成应届毕业纪念图"
   brand_color: "#8A5A2B"
-  default_prompt: "Use $campusrise to turn my portrait and school into an uplifting alma-mater narrative poster."
+  default_prompt: "Use $campusrise to turn my portrait photos and confirmed school into a realistic fresh-graduate commemorative poster with verified campus architecture."

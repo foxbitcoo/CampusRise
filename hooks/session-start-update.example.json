@@ -1,4 +1,6 @@
 {
+  "name": "CampusRise V4.1 session-start auto-update example",
+  "description": "Example hook for agents that support SessionStart updates. Keep the installed CampusRise skill synced before a new session.",
   "hooks": {
     "SessionStart": [
       {
